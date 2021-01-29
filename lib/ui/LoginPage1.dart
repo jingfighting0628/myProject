@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/utils/LogUtil.dart';
@@ -10,6 +11,7 @@ import 'package:sp_util/sp_util.dart';
 import 'package:flutter_app/model/loginModel.dart';
 import 'package:flutter_app/ui/mian_page.dart';
 import 'package:flutter_app/ui/main_page1.dart';
+import 'package:flutter_app/utils/index.dart';
 class LoginPage1 extends StatefulWidget{
 
   @override
@@ -80,26 +82,14 @@ class _LoginPageState1 extends State<LoginPage1>{
           fontSize: 16.0
       );
 
-      HttpClient client = HttpClient();
       var responseBody;
-      // client.post('', 8008, '').then(Request );
-      Map <String,String> map = Map();
-      map['username'] = username;
-      map['pwd'] = password;
-      var uri =  'http://218.12.25.203:8008/api/app/Login' ;
-      // = Uri(scheme:'http', host: '218.12.25.203',port: 8008,path: '/api/app/Login',queryParameters: {'username':username,'pwd':password});
-
-      HttpClientRequest request = await client.postUrl(Uri.parse(uri));
-      request.headers.set('content-type', 'application/json');
-      request.add(utf8.encode(json.encode(map)));
-    
-      HttpClientResponse response = await request.close();
+      Dio dio = Dio();
+      Response response;
+      response = await dio.post('http://218.12.25.203:8008/api/app/Login',data:{'username':username,'pwd':password});
+      LogUtil.d(response);
       if(response.statusCode == 200){
-
-
-
-        responseBody = await response.transform(utf8.decoder).join();
-        responseBody = json.decode(responseBody);
+        //responseBody = await response.transform(utf8.decoder).join();
+        responseBody = response.data;
         LogUtil.d('${responseBody }');
         print('${responseBody.toString()}');
 
@@ -113,7 +103,6 @@ class _LoginPageState1 extends State<LoginPage1>{
         }else if (statatus == '1'){
           //LogUtil.d('responseBody:${responseBody}');
           //SpUtil.putString('AppTicket', responseBody['AppTicket']);
-
           _loginModel = LoginModel.fromMap(responseBody['result']);
           SpUtil spUtil = await SpUtil.getInstance();
           SpUtil.putString('AppTicket', responseBody['result']['AppTicket']);
@@ -124,20 +113,15 @@ class _LoginPageState1 extends State<LoginPage1>{
           LogUtil.d(userID);
           LogUtil.d(AppTicket);
           Fluttertoast.showToast(
-              msg: "登录成功",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black45,
-              textColor: Colors.white,
-              fontSize: 16.0);
+                  msg: "登录成功",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black45,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
           Navigator.push(context, MaterialPageRoute(builder:(context) =>MainPage()));
         }
-
-
-
-
-
       }else{
         print('error');
       }
@@ -145,6 +129,24 @@ class _LoginPageState1 extends State<LoginPage1>{
         data = responseBody['result'];
         LogUtil.d('data:${data}');
       });
+      /*
+      HttpClient client = HttpClient();
+      var responseBody;
+      // client.post('', 8008, '').then(Request );
+      Map <String,String> map = Map();
+      map['username'] = username;
+      map['pwd'] = password;
+      //var uri =  'http://218.12.25.203:8008/api/app/Login' ;
+      // = Uri(scheme:'http', host: '218.12.25.203',port: 8008,path: '/api/app/Login',queryParameters: {'username':username,'pwd':password});
+      Uri uri = Uri(scheme: 'http',host: '218.12.25.203',port: 8008,path: '/api/app/Login',queryParameters: {'username':username,'pwd':password});
+      HttpClientRequest request = await client.postUrl(uri);
+      request.headers.set('content-type', 'application/json');
+      //request.add(utf8.encode(json.encode(map)));
+
+      HttpClientResponse response = await request.close();
+
+      */
+
     }
 
 
