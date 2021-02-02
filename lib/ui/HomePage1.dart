@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/bloc/bloc_provider.dart';
 import 'package:flutter_app/bloc/home_bloc.dart';
 import 'package:flutter_app/model/homeModel.dart';
+import 'package:flutter_app/ui/AttendanceApply.dart';
 import 'package:flutter_app/utils/index.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
+import '../bloc/home_bloc.dart';
 import 'LeaveApply.dart';
+import 'MessagePage.dart';
+import 'package:flutter_app/ui/AttendanceApplyPage.dart';
 class HomePage1 extends StatelessWidget{
 
 
@@ -27,6 +31,13 @@ class HomePage1 extends StatelessWidget{
         leading: Container(
           child: null,
         ),
+        actions: [
+          FlatButton(onPressed: (){
+        
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MessagePage()));
+              
+          }, child: Image.asset('images/notice.png',width: 13,height: 13,color: Colors.white54,),minWidth: 13,)
+        ],
       ),
       body:BlocProvider<homeBloc>(
         bloc: homeBloc(),
@@ -38,7 +49,7 @@ class HomePage1 extends StatelessWidget{
         onPressed: (){
 
         },
-        backgroundColor: Colors.white54,
+        backgroundColor: Colors.transparent,
         child: Image.asset('images/floatingActionImg.png'),
       ),
       );
@@ -56,7 +67,9 @@ class ContentPage extends StatelessWidget{
     });
 
     bloc.getHomeData();
-    return Column(
+    return bloc.homeStream == null ? Center(
+      child: CircularProgressIndicator(),
+    ):  Column(
 
       children: [
         StreamBuilder(
@@ -143,15 +156,15 @@ class ContentPage extends StatelessWidget{
           builder:(BuildContext context,AsyncSnapshot<HomeModel>snapshot){
 
             return Expanded(
-                child: ListView.builder(
+                    child: ListView.builder(
 
-              itemCount: snapshot.data.notice.length,
-              itemBuilder: (context,index){
+                      itemCount: snapshot.data.notice.length,
+                      itemBuilder: (context,index){
 
-                          return ListViewSubWidget(context, snapshot.data.notice.elementAt(index)) ;
-              },
+                        return ListViewSubWidget(context, snapshot.data.notice.elementAt(index)) ;
+                      },
 
-            ));
+                    ));
 
           } ,
           /*
@@ -184,7 +197,7 @@ Widget IconTextWidget(BuildContext context,String imagePath,String Mname ,int in
       //final snackBar = new SnackBar(content:Text('123'));
       //Scaffold.of(context).showSnackBar(snackBar);
       if(index == 0){
-
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AttendanceApplyPageOne()));
 
       }else if(index == 1){
 
@@ -258,21 +271,19 @@ Widget ListViewSubWidget (BuildContext context,NoticeBean noticeBean ){
               width: size.width - 36,
               height: 20,
               //color: Colors.red,
-              child: Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Text('类型 ${noticeBean.type}',style: TextStyle(color: Colors.grey,fontSize: 12),),
-                    ),
-                    Container(
-                      child: Text('发布人 ${noticeBean.announer}',style: TextStyle(color: Colors.grey,fontSize: 12)),
-                    ),
-                    Container(
-                      child: Text('发布日期 ${noticeBean.publishTime}',style: TextStyle(color: Colors.grey,fontSize: 12)),
-                    )
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Text('类型 ${noticeBean.type}',style: TextStyle(color: Colors.grey,fontSize: 12),),
+                  ),
+                  Container(
+                    child: Text('发布人 ${noticeBean.announer}',style: TextStyle(color: Colors.grey,fontSize: 12)),
+                  ),
+                  Container(
+                    child: Text('发布日期 ${noticeBean.publishTime}',style: TextStyle(color: Colors.grey,fontSize: 12)),
+                  )
+                ],
               ),
             ),
             SizedBox(

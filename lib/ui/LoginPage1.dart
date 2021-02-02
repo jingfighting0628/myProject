@@ -29,6 +29,9 @@ class _LoginPageState1 extends State<LoginPage1>{
   LoginModel _loginModel;
   TextEditingController usernameController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
+  FocusNode focusNode1 = FocusNode();
+  FocusNode focusNode2 = FocusNode();
+  FocusScopeNode  focusScopeNode;
 
 
 
@@ -199,25 +202,27 @@ class _LoginPageState1 extends State<LoginPage1>{
             child: Column(
               children: [
                 TextField(
+                  cursorColor: Colors.white,
+                  cursorWidth: 1,
                   controller: usernameController,
                   style: TextStyle(color: Colors.white,fontSize: 15),
                   decoration: InputDecoration(
                     //fillColor: Colors.white,
                     //filled: true,
-                      icon: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                      ),
-                      //labelText: '请输入用户名',
-                      //labelStyle: TextStyle(color: Colors.white),
-                      hintText: '请输入用户名',
-                      hintStyle: TextStyle(color: Colors.white,fontSize: 13),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)
-                      )
+                          icon: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                          ),
+                          //labelText: '请输入用户名',
+                          //labelStyle: TextStyle(color: Colors.white),
+                          hintText: '请输入用户名',
+                          hintStyle: TextStyle(color: Colors.white,fontSize: 13),
+                          enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white)
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white)
+                          )
                   ),
                   onChanged: (value){
                     //LogUtil.d('onChanged-username:${value}');
@@ -232,23 +237,28 @@ class _LoginPageState1 extends State<LoginPage1>{
                   height: 4,
                 ),
                 TextField(
+                  cursorColor: Colors.white,
+                  cursorWidth: 1,
                   controller: pwdController,
+
+                  focusNode: focusNode2,
+
 
                   style: TextStyle(color: Colors.white,fontSize: 15),
                   decoration: InputDecoration(
-                      icon:Icon(
-                        Icons.lock,
-                        color: Colors.white,
-                      ),
-                      //labelText: '请输入密码'
-                      hintText: '请输入密码',
-                      hintStyle: TextStyle(color: Colors.white,fontSize: 13),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)
-                      )
+                          icon:Icon(
+                            Icons.lock,
+                            color: Colors.white,
+                          ),
+                          //labelText: '请输入密码'
+                          hintText: '请输入密码',
+                          hintStyle: TextStyle(color: Colors.white,fontSize: 13),
+                          enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white)
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white)
+                          )
                   ),
                   onChanged: (value){
                     //LogUtil.d('onChanged-pwd:${value}');
@@ -257,7 +267,14 @@ class _LoginPageState1 extends State<LoginPage1>{
                   onSubmitted: (value){
                     //LogUtil.d('onSubmitted-pwd:${value}');
                   },
-                  obscureText: true,
+                  onTap: (){
+                    LogUtil.d('onTap2');
+                    if(null == focusScopeNode){
+                      focusScopeNode = FocusScope.of(context);
+                    }
+                    focusScopeNode.requestFocus(focusNode2);
+                  },
+                  obscureText: false,
                 ),
                 SizedBox(
                   height: 11,
@@ -320,7 +337,125 @@ class _LoginPageState1 extends State<LoginPage1>{
 
 }
 
+/*
+*  Container(
+                  child: TextField(
 
+                    focusNode: focusNode1,
+
+                    cursorColor: Colors.white,
+                    cursorWidth: 1,
+                    //cursorHeight: 29,
+
+                    controller: usernameController,
+                    maxLines: 1,
+                    obscureText: false,
+                    textAlign:TextAlign.left ,
+                    style: TextStyle(
+                      color: Colors.white,
+                      //backgroundColor: Colors.yellow,
+                      fontSize: 13,
+                      //letterSpacing: 3,
+                      //wordSpacing: 10,
+
+                    ),
+                    keyboardType:TextInputType.datetime ,
+                    textInputAction:TextInputAction.go ,
+                    enabled: true,
+                    decoration: InputDecoration(
+                      //fillColor: Colors.grey,
+                      filled: true,
+                      hintText: '请输入用户名',
+                      hintStyle: TextStyle(color: Colors.white,fontSize: 13),
+                      //labelText: '用户名',
+                      prefixIcon: Icon(Icons.person,color: Colors.white,),
+
+                      //suffixText: '用户名',
+                      //suffixIcon: Icon(Icons.add),
+                            enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white)
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white)
+                            )
+                    ),
+                    onChanged: (value){
+                      print('onChanged1:${value}');
+                    },
+                    onSubmitted: (value){
+                      print('onSubmitted1${value}');
+                    },
+                    onTap: (){
+                      print('onTap1');
+                      /*
+                  if(null == focusScopeNode){
+                    focusScopeNode = FocusScope.of(context);
+                  }
+                  focusScopeNode.requestFocus(focusNode1);
+
+                   */
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Container(
+                  child: TextField(
+
+                    focusNode: focusNode2,
+                    cursorColor: Colors.white,
+                    //cursorWidth: 1,
+                    //maxLength: 1,
+
+                    controller: pwdController,
+                    maxLines: 1,
+                    ///是否是密码
+                    obscureText: true,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Colors.white,
+                      //backgroundColor: Colors.orange,
+                      fontSize: 13,
+                      //letterSpacing: 1,
+                      //wordSpacing: 3,
+
+                    ),
+                    textInputAction: TextInputAction.search,
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value){
+                      print('onChanged2:${value}');
+                    },
+                    onSubmitted: (value){
+                      print('onSubmitted2${value}');
+                    },
+                    onTap: (){
+                      print('onTap2');
+                      /*
+                  if(null == focusScopeNode){
+                    focusScopeNode = FocusScope.of(context);
+                  }
+                  focusScopeNode.requestFocus(focusNode2);
+
+                   */
+                    },
+                    decoration: InputDecoration(
+                            hintText: '请输入密码',
+                            hintStyle: TextStyle(color: Colors.white,fontSize: 13),
+                            prefixIcon: Icon(Icons.lock,color: Colors.white,),
+                            filled: true,
+                            enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white)
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white)
+                            )
+
+                    ),
+                  ),
+                ),
+*
+* */
 
 
 
